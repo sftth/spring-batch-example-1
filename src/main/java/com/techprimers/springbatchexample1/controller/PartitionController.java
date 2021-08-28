@@ -1,9 +1,11 @@
 package com.techprimers.springbatchexample1.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,17 +13,17 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
-@RequestMapping("/chunk/load")
-public class LoadController {
+public class PartitionController {
 
     @Autowired
     JobLauncher jobLauncher;
 
-    @Resource(name="chunkJob")
+    @Resource(name = "partitionJob")
     Job job;
 
-    @GetMapping
+    @GetMapping("partition/load")
     public BatchStatus load() throws JobParametersInvalidException, JobExecutionException {
         Map<String, JobParameter> maps = new HashMap<>();
         maps.put("time", new JobParameter(System.currentTimeMillis()));
@@ -29,12 +31,12 @@ public class LoadController {
         JobParameters parameters = new JobParameters(maps);
         JobExecution jobExecution = jobLauncher.run(job, parameters);
 
-        System.out.println("JobExecution: " + jobExecution.getStatus());
+        log.info("JobExecution: " + jobExecution.getStatus());
 
-        System.out.println("Batch is Running...");
+        log.info("Batch is Running...");
 
         while (jobExecution.isRunning()) {
-            System.out.println("...");
+            log.info("...");
         }
 
         return jobExecution.getStatus();

@@ -14,7 +14,6 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
-import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +24,7 @@ import org.springframework.core.io.Resource;
 @EnableBatchProcessing
 public class SpringBatchConfig {
 
-    @Bean
+    @Bean(name = "chunkJob")
     public Job job(JobBuilderFactory jobBuilderFactory,
                    StepBuilderFactory stepBuilderFactory,
                    ItemReader<User> itemReader,
@@ -45,7 +44,7 @@ public class SpringBatchConfig {
                 .build();
     }
 
-    @Bean
+    @Bean(name = "itemReader")
     public FlatFileItemReader<User> itemReader(@Value("${input}")Resource resource) {
         FlatFileItemReader<User> flatFileItemReader = new FlatFileItemReader<>();
         flatFileItemReader.setResource(resource);

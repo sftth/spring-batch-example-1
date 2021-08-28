@@ -1,4 +1,4 @@
-package com.techprimers.springbatchexample1.batch;
+package com.techprimers.springbatchexample1.batch.csv2db;
 
 import com.techprimers.springbatchexample1.model.User;
 import org.springframework.batch.item.ItemProcessor;
@@ -8,10 +8,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+@Component("itemProcessor")
 public class Processor implements ItemProcessor<User, User> {
     private static  final Map<String, String > DEPT_NAMES = new HashMap<>();
-
 
     public Processor() {
         DEPT_NAMES.put("001", "Technology");
